@@ -1,3 +1,4 @@
+
 declare module 'MyType' {
     import { Document } from 'mongoose'
 
@@ -16,22 +17,37 @@ declare module 'MyType' {
         kefu_id: string
         kefuSocketId: string
         sesstionNum: number
+        kefuIsOk: boolean //是否在线
+        timeOut: number //离线之后的时长单位分钟
     }
-    interface IkefuToServer {
-        userSocketId: string
-        data: IsingleMsg
+    interface IcurrentConnect {
+        [userSocketId: string]: {
+            kefu: IkefuInfo
+            extraSesstionList: IsingleMsg[]
+        }
     }
-
-    interface IcurrentConnects {
-        [userSocketId: string]: IkefuInfo
-    }
-
     interface IawaitList {
         [userSocketId: string]: {
             userInfo: IuserInfo
             talkList: IsingleMsg[]
         }
     }
+    
+
+    // socket接口
+    
+    type IserverToKefu = IsingleMsg //服务器发送给客服的普通消息
+    type IserverToKefu_awaitList = IawaitList //服务器发送给客服的等待消息
+    type IserverToKefu_userinto = IuserInfo //服务器发送给客服的 用户进线通知
+    type IserverToKefu_userdiscon = string //服务器发送给客服的 用户断开连接， 发送的usersocketId
+    interface IkefuToServer { // kefu发送给服务器的普通消息
+        data: IsingleMsg
+        userSocketId: string
+    }
+    type IuserToServer = IsingleMsg //用户发送给服务器的普通消息
+    type IserverToUser = IsingleMsg //服务器发送给用户的普通消息
+    type IserverToUser_kefudiscon = string // 服务器发送给用户的 客服已经离线
+    // 数据库结构
     interface Ikefu {
         _id: string
         account: string
@@ -63,25 +79,25 @@ declare module 'MyType' {
         kefu_id: string
     }
     interface IrecordModel extends Document, Irecord {}
-    // 获取账号信息的接口  /kefu/ GET
-    interface IgetKefusQuery {
+
+    //api接口
+    interface IgetKefusQuery { // 获取账号信息的接口  /kefu/ GET
         page: number
         limit: number
         _id: string
     }
-    interface IgetKefusRes {
+    interface IgetKefusRes { // 返回
         status: boolean
         msg: string
         data: Ikefu[]
         total: number
     }
-    // 获取聊天记录的接口  /kefu/ GET
-    interface IgetRecordsQuery {
+    interface IgetRecordsQuery { // 获取聊天记录的接口  /kefu/ GET
         page: number
         limit: number
         kefu_id: string
     }
-    interface IgetRecordsRes {
+    interface IgetRecordsRes { // 返回
         status: boolean
         msg: string
         data: Irecord[]
