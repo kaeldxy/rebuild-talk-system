@@ -14,17 +14,19 @@ declare module 'MyType' {
         os: string
     }
     interface IkefuInfo {
-        kefu_id: string
         kefuSocketId: string
         sesstionNum: number
         kefuIsOk: boolean //是否在线
         timeOut: number //离线之后的时长单位分钟
     }
-    interface IcurrentConnect {
+    interface IcurrentConnects {
         [userSocketId: string]: {
             kefu: IkefuInfo
             extraSesstionList: IsingleMsg[]
         }
+    }
+    interface IonlineKefus {
+        [kefu_id: string]: IkefuInfo
     }
     interface IawaitList {
         [userSocketId: string]: {
@@ -36,14 +38,27 @@ declare module 'MyType' {
 
     // socket接口
     
+    interface IuserConnectQuery {
+        userInfo: string // 转JSON
+    }
+    interface IkefuConnectQuery {
+        token: string
+        kefu_id: string
+    }
+
     type IserverToKefu = IsingleMsg //服务器发送给客服的普通消息
     type IserverToKefu_awaitList = IawaitList //服务器发送给客服的等待消息
     type IserverToKefu_userinto = IuserInfo //服务器发送给客服的 用户进线通知
     type IserverToKefu_userdiscon = string //服务器发送给客服的 用户断开连接， 发送的usersocketId
+    interface IserverToKefu_reconlist { // 服务器发送客服的 客服断开链接在一定时间内 重连后 发送的一些暂存的消息
+        [userSocketId: string]: IsingleMsg[]
+    }
+
     interface IkefuToServer { // kefu发送给服务器的普通消息
         data: IsingleMsg
         userSocketId: string
     }
+
     type IuserToServer = IsingleMsg //用户发送给服务器的普通消息
     type IserverToUser = IsingleMsg //服务器发送给用户的普通消息
     type IserverToUser_kefudiscon = string // 服务器发送给用户的 客服已经离线
@@ -92,6 +107,7 @@ declare module 'MyType' {
         data: Ikefu[]
         total: number
     }
+
     interface IgetRecordsQuery { // 获取聊天记录的接口  /kefu/ GET
         page: number
         limit: number
