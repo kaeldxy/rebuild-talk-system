@@ -8,8 +8,8 @@ import {
 } from 'MyType'
 import { Server } from 'socket.io'
 import _ from 'lodash'
+
 const mode = process.env.NODE_ENV === 'production'
-console.log('mode', process.env.NOED_ENV)
 const currentConnects: IcurrentConnects = {}
 let awaitList: IawaitList = {}
 const onlineKefus: IkefuInfo[] = []
@@ -17,40 +17,6 @@ const onlineKefus: IkefuInfo[] = []
 export const socketHandler = (io: Server) => {
     const userNameSpace = io.of('/user')
     const kefuNameSpace = io.of('/kefu')
-
-    userNameSpace
-        .use((userSocket, next) => {
-            if (mode && userSocket.handshake.xdomain) {
-                userSocket.disconnect(true)
-            } else {
-                next()
-            }
-        })
-        .on('connection', userSocket => {
-            const userSocketId = userSocket.id
-            const userInfo: IuserInfo = userSocket.handshake.query
-            const kefu = _.minBy<IkefuInfo>(onlineKefus, 'sesstionNum')
-            if (kefu) {
-                currentConnects[userSocketId] = kefu
-                kefuNameSpace
-                    .to(kefu.kefuSocketId)
-                    .emit('server_to_kefu-userinto', userInfo)
-            } else {
-                awaitList[userSocketId] = { userInfo, talkList: [] }
-            }
-            userSocket
-                .on('user_to_server', (data: IsingleMsg) => {
-                    if (awaitList[userSocketId]) {
-                        awaitList[userSocketId].talkList.push(data)
-                    } else {
-                        kefuNameSpace
-                            .to(currentConnects[userSocketId].kefuSocketId)
-                            .emit('server_to_kefu', data)
-                    }
-                })
-                .on('disconnect', (reason: string) => {})
-        })
-
     const max = 10
     const timeOut = 3 * 60000
     const spliceAwaitList = () => {
@@ -67,6 +33,56 @@ export const socketHandler = (io: Server) => {
         }
         return { sendData, done: true }
     }
+    const names = ['user', 'kefu']
+
+    io.use((socket, next) => {
+        if (mode && socket.handshake.xdomain) return socket.disconnect(true)
+        next()
+    })
+
+    userNameSpace
+        .use((userSocket, next) => {
+            next()
+        })
+        .on('connection', userSocket => {
+            const userSocketId = userSocket.id
+            const userInfo: IuserInfo = userSocket.handshake.query
+            const kefu = _.minBy<IkefuInfo>(onlineKefus.filter(item => item.status), 'sesstionNum')
+            if (kefu) {
+                kefu.sesstionNum++
+                currentConnects[userSocketId] = {
+                    kefu,
+                    disconnectMsgList: []
+                }
+                kefuNameSpace
+                    .to(kefu.kefuSocketId)
+                    .emit('server_to_kefu-userinto', userInfo)
+            } else {
+                awaitList[userSocketId] = { userInfo, talkList: [] }
+            }
+            userSocket
+                .on('user_to_server', (data: IsingleMsg) => {
+                    if (awaitList[userSocketId]) {
+                        awaitList[userSocketId].talkList.push(data)
+                    } else {
+                        kefuNameSpace
+                            .to(currentConnects[userSocketId].kefuSocketId)
+                            .emit('server_to_kefu', data)
+                    }
+                })
+                .on('disconnect', (reason: string) => {
+                    if (awaitList[userSocketId]) {
+                        delete awaitList[userSocketId]
+                    }
+                    if (currentConnects[userSocketId]) {
+                        delete currentConnects[userSocketId]
+                        kefuNameSpace
+                            .to(currentConnects[userSocketId].kefuSocketId)
+                            .emit('server_to_kefu-disconnect', userSocketId)
+                    }
+                })
+        })
+
     kefuNameSpace
         .use((kefuSocket, next) => {
             if (mode && kefuSocket.handshake.xdomain) {
@@ -75,6 +91,7 @@ export const socketHandler = (io: Server) => {
                 next()
             }
         })
+
         .on('connection', kefuSocket => {
             let timer: NodeJS.Timeout
             const kefu_id: string = kefuSocket.handshake.query

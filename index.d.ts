@@ -16,6 +16,7 @@ declare module 'MyType' {
         kefu_id: string
         kefuSocketId: string
         sesstionNum: number
+        status: boolean
     }
     interface IkefuToServer {
         userSocketId: string
@@ -23,7 +24,15 @@ declare module 'MyType' {
     }
 
     interface IcurrentConnects {
-        [userSocketId: string]: IkefuInfo
+        [userSocketId: string]: {
+            kefu: {
+                kefu_id: string
+                kefuSocketId: string
+                sesstionNum: number
+                status: boolean
+            }
+            disconnectMsgList: IsingleMsg[]
+        }
     }
 
     interface IawaitList {
@@ -75,7 +84,7 @@ declare module 'MyType' {
         data: Ikefu[]
         total: number
     }
-    // 获取聊天记录的接口  /kefu/ GET
+    // 获取聊天记录的接口  /record/ GET
     interface IgetRecordsQuery {
         page: number
         limit: number
