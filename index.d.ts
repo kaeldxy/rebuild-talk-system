@@ -63,6 +63,7 @@ declare module 'MyType' {
     type IserverToUser = IsingleMsg //服务器发送给用户的普通消息
     type IserverToUser_kefudiscon = string // 服务器发送给用户的 客服已经离线
     // 数据库结构
+
     interface Ikefu {
         _id: string
         account: string
@@ -73,7 +74,9 @@ declare module 'MyType' {
         nickName: string
         imgSrc: string
     }
-    interface IkefuModel extends Document, Ikefu {}
+
+    type IkefuModel = Ikefu & Document 
+
     interface Irecord {
         _id: string
         userInfo: {
@@ -93,7 +96,8 @@ declare module 'MyType' {
         ]
         kefu_id: string
     }
-    interface IrecordModel extends Document, Irecord {}
+    
+    type IrecordModel = Document & Irecord
 
     //api接口
     interface IgetKefusQuery { // 获取账号信息的接口  /kefu/ GET

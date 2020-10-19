@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import { IrecordModel } from 'MyType'
-const recordSchema = new mongoose.Schema<IrecordModel>(
+const recordSchema = new mongoose.Schema(
     {
         userInfo: {
             ip: String,
