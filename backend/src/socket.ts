@@ -194,10 +194,12 @@ export const socketHandler = (io: Server) => {
                     disconTimer = setInterval(() => {
                         kefu.timeOut++
                         if (kefu.timeOut === kefuMaxTimeOut) {
-                            if(onlineKefus[kefu_id]) delete onlineKefus[kefu_id]
-                            for(const userSocketId in currentConnects){
+                            if (onlineKefus[kefu_id])
+                                delete onlineKefus[kefu_id]
+                            for (const userSocketId in currentConnects) {
                                 const Ikefu = currentConnects[userSocketId].kefu
-                                if(kefu === Ikefu) delete currentConnects[userSocketId]
+                                if (kefu === Ikefu)
+                                    delete currentConnects[userSocketId]
                             }
                             clearInterval(disconTimer as NodeJS.Timeout)
                             kefuSocket.removeAllListeners('kefu_to_server')
@@ -209,4 +211,4 @@ export const socketHandler = (io: Server) => {
                 })
         })
 }
-//   
+//
