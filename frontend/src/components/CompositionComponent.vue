@@ -11,7 +11,6 @@
         <p>Clicks on todos: {{ clickCount }}</p>
     </div>
 </template>
-
 <script lang="ts">
 import {
     defineComponent,

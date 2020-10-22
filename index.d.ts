@@ -64,7 +64,7 @@ declare module 'MyType' {
     type IserverToUser_kefudiscon = string // 服务器发送给用户的 客服已经离线
     // 数据库结构
     interface Ikefu {
-        _id: string
+        // _id: string
         account: string
         pwd: string
         name: string
@@ -75,7 +75,7 @@ declare module 'MyType' {
     }
     interface IkefuModel extends Document, Ikefu {}
     interface Irecord {
-        _id: string
+        // _id: string
         userInfo: {
             ip: string
             addr: string

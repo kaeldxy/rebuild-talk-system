@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import { IkefuModel } from 'MyType'
-const kefuSchema = new mongoose.Schema<IkefuModel>(
+const kefuSchema = new mongoose.Schema(
     {
         account: String,
         pwd: String,
