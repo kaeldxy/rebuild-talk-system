@@ -43,7 +43,6 @@ declare module 'MyType' {
         token: string
         kefu_id: string
     }
-
     type IserverToKefu = IsingleMsg //服务器发送给客服的普通消息
     type IserverToKefu_awaitList = IawaitList //服务器发送给客服的等待消息
     type IserverToKefu_userinto = IuserInfo //服务器发送给客服的 用户进线通知
@@ -52,16 +51,15 @@ declare module 'MyType' {
         // 服务器发送客服的 客服断开链接在一定时间内 重连后 发送的一些暂存的消息
         [userSocketId: string]: IsingleMsg[]
     }
-
     interface IkefuToServer {
         // kefu发送给服务器的普通消息
         data: IsingleMsg
         userSocketId: string
     }
-
     type IuserToServer = IsingleMsg //用户发送给服务器的普通消息
     type IserverToUser = IsingleMsg //服务器发送给用户的普通消息
     type IserverToUser_kefudiscon = string // 服务器发送给用户的 客服已经离线
+
     // 数据库结构
 
     interface Ikefu {
@@ -74,9 +72,7 @@ declare module 'MyType' {
         nickName: string
         imgSrc: string
     }
-
     type IkefuModel = Ikefu & Document
-
     interface Irecord {
         // _id: string
         userInfo: {
@@ -96,10 +92,10 @@ declare module 'MyType' {
         ]
         kefu_id: string
     }
-
     type IrecordModel = Document & Irecord
 
     //api接口
+    
     interface IgetKefusQuery {
         // 获取账号信息的接口  /kefu/ GET
         page: number

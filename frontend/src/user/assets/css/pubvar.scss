@@ -1,0 +1,31 @@
+@charset "utf-8";
+
+$topHeight: 90px;
+$midHeight: 489px;
+$botHeight: 182px;
+
+$leftWidth: 171px;
+$midWidth: 694px;
+$rightWidth: 414px;
+
+$borderColor1: #e4e7f1;
+
+.leftW {
+    width: $leftWidth;
+}
+
+.midW {
+    width: $midWidth;
+}
+
+.rightW {
+    width: $rightWidth;
+}
+
+.midH {
+    height: $midHeight;
+}
+
+.botH {
+    height: $botHeight;
+}

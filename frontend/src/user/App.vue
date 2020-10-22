@@ -12,38 +12,38 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue'
+import { defineComponent } from 'vue'
+import HeaderModel from './views/HeaderModel.vue'
+import LeftSide from './views/LeftSide.vue'
+import MidSide from './views/MidSide.vue'
+import RightSide from './views/RightSide.vue'
 
-    export default defineComponent({
-        components: {},
-        setup(prop, ctx) {}
-    })
+export default defineComponent({
+    components: {
+        HeaderModel,
+        LeftSide,
+        MidSide,
+        RightSide
+    }
+})
 </script>
 
 <style lang="scss">
-    $topHeight: 90px;
-    $midHeight: 489px;
-    $botHeight: 182px;
+@charset "utf-8";
+@import './assets/css/pubvar.scss';
 
-    $leftWidth: 171px;
-    $midWidth: 694px;
-    $rightWidth: 414px;
-
-    $borderColor1: #e4e7f1;
-
-    .container {
-        width: 100%;
-        height: 100vh;
-        background-color: #ccc;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .main {
-        background-color: #fff;
-    }
-    .rest {
-        display: flex;
-    }
-    
+.container {
+    width: 100%;
+    height: 100vh;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main {
+    background-color: #fff;
+}
+.rest {
+    display: flex;
+}
 </style>
