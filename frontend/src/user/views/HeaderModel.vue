@@ -1,7 +1,7 @@
 <template>
     <header class="header">
         <img src="../assets/img/logo.png" alt="LOGO" />
-        <h1>XASDASD医院</h1>
+        <h1>常州市京城皮肤病医院</h1>
     </header>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="midside rightW">
+    <div class="rightside rightW">
         <div class="top midH"></div>
         <div class="bot botH"></div>
     </div>
@@ -14,7 +14,8 @@ export default defineComponent({})
 <style scoped lang="scss">
 @charset "utf-8";
 @import '../assets/css/pubvar.scss';
-.midside {
+.rightside {
+    border-left: 1px solid $borderColor1;
     > .top {
         border-bottom: 1px solid $borderColor1;
         box-sizing: border-box;
